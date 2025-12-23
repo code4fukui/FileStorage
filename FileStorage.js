@@ -18,4 +18,17 @@ export class FileStorage {
   async load(path) {
     return await Deno.readFile(this.basedir + path);
   }
+  //
+  async saveText(path, s) {
+    return await this.save(path, new TextEncoder().encode(s));
+  }
+  async loadText(path) {
+    return new TextDecoder().decode(await this.load(path));
+  }
+  async saveJSON(path, o) {
+    return await this.saveText(path, JSON.stringify(o, null, 2));
+  }
+  async loadJSON(path) {
+    return JSON.parse(await this.loadText(path));
+  }
 }
