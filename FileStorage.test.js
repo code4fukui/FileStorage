@@ -30,3 +30,9 @@ Deno.test("json", async () => {
   const txt = await fs.loadJSON(path);
   t.assertEquals(txt, { name: "abc" });
 });
+Deno.test("null if not exists", async () => {
+  const fs = new FileStorage("temp");
+  const path = "test/20251211/def.txt";
+  const txt = await fs.loadJSON(path);
+  t.assertEquals(txt, null);
+});

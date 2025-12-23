@@ -16,19 +16,27 @@ export class FileStorage {
     return true;
   }
   async load(path) {
-    return await Deno.readFile(this.basedir + path);
+    try {
+      return await Deno.readFile(this.basedir + path);
+    } catch (e) {
+      return null;
+    }
   }
   //
   async saveText(path, s) {
     return await this.save(path, new TextEncoder().encode(s));
   }
   async loadText(path) {
-    return new TextDecoder().decode(await this.load(path));
+    const bin = await this.load(path);
+    if (!bin) return null;
+    return new TextDecoder().decode(bin);
   }
   async saveJSON(path, o) {
     return await this.saveText(path, JSON.stringify(o, null, 2));
   }
   async loadJSON(path) {
+    const s = await this.loadText(path);
+    if (!s) return null;
     return JSON.parse(await this.loadText(path));
   }
 }
